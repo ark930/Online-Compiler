@@ -1,0 +1,53 @@
+body {
+    /* background: rgb(243, 243, 244); */
+}
+nav.main {
+    background: rgb(183, 201, 211);
+    margin-bottom: 0;
+}
+/* nav .navbar-brand, nav .navbar-text, nav a.dropdown-toggle {
+    color: white;
+} */
+/* nav.main .nav>li>a:focus, nav.main .nav>li>a:hover, nav.main .nav .open>a, nav.main .nav .open>a:focus, nav.main .nav .open>a:hover {
+    background: none;
+} */
+
+nav.sub {
+    background: rgb(240, 247, 250);
+    margin-bottom: 0;
+}
+.navbar-btn {
+    margin-right: 10px;
+    background: inherit;
+}
+.navbar-btn:hover {
+    background: rgb(200, 230, 241)
+}
+nav.sub label {
+    font-weight: normal;
+}
+nav.sub select {
+    background: inherit;
+    margin-right: 20px;
+}
+select#language {
+    width: 100px;
+}
+.main-content .container {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+}
+
+textarea#source-code {
+    max-height: 600px;
+}
+textarea#input{
+    max-height: 120px;
+}
+textarea#complier-result {
+    max-height: 140px;
+}
+textarea#output{
+    max-height: 260px;
+}
