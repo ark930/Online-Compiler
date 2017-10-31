@@ -37,7 +37,7 @@ class RunController extends Controller
             if($retval !== 0) {
                 $error = join("\n", $output);
                 $files = explode('/', $sourceFile);
-                $error = $files[count($files) - 1] . explode($sourceFile, $error)[1];
+                $error = 'main.c' . explode($sourceFile, $error)[1];
                 $result = null;
             } else {
                 $result = shell_exec($outFile);
@@ -55,7 +55,7 @@ class RunController extends Controller
             if($retval !== 0) {
                 $error = join("\n", $output);
                 $files = explode('/', $sourceFile);
-                $error = $files[count($files) - 1] . explode($sourceFile, $error)[1];
+                $error = 'main.cpp' . explode($sourceFile, $error)[1];
                 $result = null;
             } else {
                 $result = shell_exec($outFile);
