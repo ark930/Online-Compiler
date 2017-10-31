@@ -1,6 +1,6 @@
 var sourceCode = $('#source-code')
 var input = $('#input')
-var complierResult = $('complier-result')
+var complierResult = $('#complier-result')
 var output = $('#output')
 var language = $('#language')
 
@@ -28,7 +28,16 @@ $('#run').click(function(){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(result) {
-            output.text(result.result)
+            if(result.result) {
+                output.text(result.result)
+            } else {
+                output.text('')
+            }
+            if(result.error) {
+                complierResult.text('编译失败\n' + result.error)
+            } else {
+                complierResult.text('编译成功')
+            }
         }
     });
 })
