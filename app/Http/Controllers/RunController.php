@@ -21,6 +21,8 @@ class RunController extends Controller
         fwrite($handle, $code);
         fclose($handle);
 
+        putenv('PATH=' . env('PATH'));
+
         $result = null;
         if ($language == 'php') {
             $result = shell_exec("php $tmpfname");
