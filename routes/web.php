@@ -14,3 +14,5 @@
 Route::get('/', 'RunController@index');
 
 Route::post('/run', 'RunController@run');
+
+Auth::routes();
