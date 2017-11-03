@@ -2,17 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\APi\Api;
 use Illuminate\Http\Request;
 
 class RunController extends Controller
 {
     public function index(Request $request)
     {
+        $api = new Api();
+        $pid = $api->createTerminal();
+        $request->session()->put('pid', $pid);
+
         return view('index');
     }
 
     public function run(Request $request)
     {
+        $pid = $request->session()->get('pid');
+
         $language = strtolower($request->get('language'));
         $code = $request->get('source');
 
@@ -30,7 +37,15 @@ class RunController extends Controller
         } else if ($language == 'c语言') {
             $sourceFile = "$tmpfname.c";
             $outFile = "$tmpfname.out";
-            $result = shell_exec("cp $tmpfname $sourceFile");
+//            $result = shell_exec("cp $tmpfname $sourceFile");
+
+            $targetPath = storage_path('app/public');
+            $api = new Api();
+            $api->runCmd($pid, "cd $targetPath");
+            $api->runCmd($pid, "cp $tmpfname $sourceFile");
+            $api->runCmd($pid, "gcc $sourceFile -o $outFile");
+            $api->runCmd($pid, $outFile);
+dd(123);
             exec("gcc $sourceFile -o $outFile 2>&1", $output, $retval);
             unlink($sourceFile);
 
@@ -39,7 +54,17 @@ class RunController extends Controller
                 $error = str_replace($sourceFile, 'main.c', $error);
                 $result = null;
             } else {
-                $result = shell_exec($outFile);
+//                $result = shell_exec($outFile);
+//                $result = shell_exec("$outFile <<EOF\n1\n2\n3324\nEOF\n");
+
+                $runcmd = $outFile;
+
+                $process_stdin = popen($runcmd, 'w');
+                fwrite($process_stdin, "123");
+                $result = fread($handle, 2096);
+
+                pclose($process_stdin);
+
                 unlink($outFile);
             }
         } else if ($language == 'c++') {

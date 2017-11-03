@@ -7,6 +7,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>ByteWave</title>
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ asset('css/xterm.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/index.css') }}">
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -114,6 +115,7 @@
         </div>
         <div class="form-group">
           <label for="complier-result">编译结果</label>
+          <div id="terminal"></div>
           <textarea id="complier-result" class="form-control" rows="7"></textarea>
         </div>
         <div class="form-group">
@@ -128,6 +130,38 @@
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="{{ asset('js/xterm.js') }}"></script>
+<script src="{{ asset('js/addons/attach/attach.js') }}"></script>
 <script src="{{ asset('js/index.js') }}"></script>
+<script>
+    var term = new Terminal();
+    term.open(document.getElementById('terminal'));
+
+    var protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
+    var socketURL = protocol + location.hostname + ((location.port) ? (':' + '3000') : '') + '/terminals/';
+    socketURL += {{ session()->get('pid') }};
+    var socket = new WebSocket(socketURL);
+    socket.onopen = runRealTerminal;
+//    $.ajax({
+//        url: "http://127.0.0.1:3000/terminals",
+//        method: 'post',
+//        data: {},
+//        success: function(result) {
+//            var pid = result;
+//
+//        },
+//        error: function (result) {
+//            console.log('error', result)
+//        }
+//    });
+
+//    socket.onclose = runFakeTerminal;
+//    socket.onerror = runFakeTerminal;
+
+    function runRealTerminal() {
+        term.attach(socket);
+        term._initialized = true;
+    }
+</script>
 </body>
 </html>
