@@ -104,23 +104,23 @@
   </nav>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-8">
+      <div class="col-sm-7">
         <label for="source-code">源代码</label>
         <textarea id="source-code" class="form-control" rows="30"></textarea>
       </div>
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label for="input">输入</label>
-          <textarea id="input" class="form-control" rows="5"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="complier-result">编译结果</label>
-          <div id="terminal"></div>
-          <textarea id="complier-result" class="form-control" rows="7"></textarea>
-        </div>
+      <div class="col-sm-5">
+        {{--<div class="form-group">--}}
+          {{--<label for="input">输入</label>--}}
+          {{--<textarea id="input" class="form-control" rows="5"></textarea>--}}
+        {{--</div>--}}
+        {{--<div class="form-group">--}}
+          {{--<label for="complier-result">编译结果</label>--}}
+          {{--<textarea id="complier-result" class="form-control" rows="7"></textarea>--}}
+        {{--</div>--}}
         <div class="form-group">
           <label for="output">程序输出</label>
-          <textarea id="output" class="form-control" rows="13"></textarea>
+          <div id="terminal"></div>
+          {{--<textarea id="output" class="form-control" rows="13"></textarea>--}}
         </div>
       </div>
     </div>
