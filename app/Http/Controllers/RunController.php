@@ -45,28 +45,9 @@ class RunController extends Controller
             $api->runCmd($pid, "cp $tmpfname $sourceFile");
             $api->runCmd($pid, "gcc $sourceFile -o $outFile");
             $api->runCmd($pid, $outFile);
-dd(123);
-            exec("gcc $sourceFile -o $outFile 2>&1", $output, $retval);
+
             unlink($sourceFile);
-
-            if($retval !== 0) {
-                $error = join("\n", $output);
-                $error = str_replace($sourceFile, 'main.c', $error);
-                $result = null;
-            } else {
-//                $result = shell_exec($outFile);
-//                $result = shell_exec("$outFile <<EOF\n1\n2\n3324\nEOF\n");
-
-                $runcmd = $outFile;
-
-                $process_stdin = popen($runcmd, 'w');
-                fwrite($process_stdin, "123");
-                $result = fread($handle, 2096);
-
-                pclose($process_stdin);
-
-                unlink($outFile);
-            }
+            unlink($outFile);
         } else if ($language == 'c++') {
             $sourceFile = "$tmpfname.cpp";
             $outFile = "$tmpfname.out";
