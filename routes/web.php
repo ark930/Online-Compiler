@@ -11,8 +11,16 @@
 |
 */
 
+Auth::routes();
+
 Route::get('/', 'RunController@index');
 
 Route::post('/run', 'RunController@run');
 
-Auth::routes();
+Route::group([
+    'prefix' => 'codes',
+    'middleware' => ['auth']
+], function () {
+    Route::get('/', 'CodeController@index');
+    Route::post('/', 'CodeController@create');
+});
