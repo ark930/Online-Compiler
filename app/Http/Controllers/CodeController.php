@@ -23,10 +23,12 @@ class CodeController extends Controller
     {
         $language = $this->languageFilter($request->get('language'));
         $codeText = $request->get('code');
+        $filename = $request->get('filename');
 
         $code = new Code();
         $code['language'] = $language;
         $code['code'] = $codeText;
+        $code['filename'] = $filename;
 
         $user = $request->user();
         $user->codes()->save($code);

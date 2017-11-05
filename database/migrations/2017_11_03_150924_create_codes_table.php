@@ -16,6 +16,7 @@ class CreateCodesTable extends Migration
         Schema::create('codes', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
+            $table->string('filename');
             $table->enum('language', ['c', 'c++', 'java', 'python27', 'python3', 'php']);
             $table->text('code');
             $table->timestamps();

@@ -17,6 +17,8 @@ Route::get('/', 'RunController@index');
 
 Route::post('/run', 'RunController@run');
 
+Route::post('terminals', 'TerminalController@create');
+
 Route::group([
     'prefix' => 'codes',
     'middleware' => ['auth']

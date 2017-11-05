@@ -8,10 +8,12 @@
 <div class="main-content">
   <nav class="navbar sub">
     <div class="container-fluid">
+      @auth
       <div class="navbar-header">
         <button type="button" class="btn btn-default navbar-btn">打开</button>
-        <button type="button" class="btn btn-default navbar-btn">保存</button>
+        <button id="save" type="button" class="btn btn-default navbar-btn">保存</button>
       </div>
+      @endauth
       <div class="navbar-left">
         <div class="navbar-form">
           <div class="form-group">
@@ -75,6 +77,7 @@
       <div class="col-sm-7">
         <label for="source-code">源代码</label>
         <textarea id="source-code" class="form-control" rows="30"></textarea>
+        {{--<textarea id="source-code" class="form-control" rows="30" style="display: none;"></textarea>--}}
       </div>
       <div class="col-sm-5">
         {{--<div class="form-group">--}}
@@ -94,41 +97,39 @@
     </div>
   </div>
 </div>
+
+<div id="save-modal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">保存代码</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="fileName" class="col-sm-2 control-label">文件名称</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="filename" placeholder="请输入文件名称" required>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="submit" class="btn btn-primary" onclick="submitCode(event)">保存</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 @endsection
 
 @section('footer_script')
   <script src="{{ asset('js/xterm.js') }}"></script>
   <script src="{{ asset('js/addons/attach/attach.js') }}"></script>
+  <script src="{{ asset('js/addons/fit/fit.js') }}"></script>
   <script src="{{ asset('js/index.js') }}"></script>
   <script>
-      var term = new Terminal();
-      term.open(document.getElementById('terminal'));
-
-      var protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
-      var socketURL = protocol + location.hostname + ((location.port) ? (':' + '3000') : '') + '/terminals/';
-      socketURL += {{ session()->get('pid') }};
-      var socket = new WebSocket(socketURL);
-      socket.onopen = runRealTerminal;
-  //    $.ajax({
-  //        url: "http://127.0.0.1:3000/terminals",
-  //        method: 'post',
-  //        data: {},
-  //        success: function(result) {
-  //            var pid = result;
-  //
-  //        },
-  //        error: function (result) {
-  //            console.log('error', result)
-  //        }
-  //    });
-
-  //    socket.onclose = runFakeTerminal;
-  //    socket.onerror = runFakeTerminal;
-
-      function runRealTerminal() {
-          term.attach(socket);
-          term._initialized = true;
-      }
   </script>
 @endsection
 </body>
