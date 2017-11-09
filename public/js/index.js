@@ -33,7 +33,7 @@ saveButton.click(function () {
 $('#run').click(function(){
     var params = {
         language: languageButton.val(),
-        source: sourceCode.val(),
+        code: sourceCode.val(),
         input: input.val()
     };
 

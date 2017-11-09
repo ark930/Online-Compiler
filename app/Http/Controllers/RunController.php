@@ -21,7 +21,7 @@ class RunController extends Controller
         $pid = $request->session()->get('pid');
 
         $language = strtolower($request->get('language'));
-        $code = $request->get('source');
+        $code = $request->get('code');
 
         $tmpfname = tempnam(storage_path('app/public'), md5($code));
         $handle = fopen($tmpfname, "w");
