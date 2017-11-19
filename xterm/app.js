@@ -10,6 +10,10 @@ var terminals = {},
 // app.use(cors());
 app.use('/build', express.static(__dirname + '/build'));
 
+app.get('/', function(req, res){
+    res.send('xterm server');
+});
+
 app.post('/terminals', function (req, res) {
   var cols = parseInt(req.query.cols),
       rows = parseInt(req.query.rows),
