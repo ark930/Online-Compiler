@@ -1,6 +1,6 @@
-// var cors = require('cors')
 var express = require('express');
 var app = express();
+var expressWs = require('express-ws')(app);
 var os = require('os');
 var pty = require('node-pty');
 
@@ -33,6 +33,30 @@ app.post('/terminals', function (req, res) {
   
   res.send(term.pid.toString());
   res.end();
+});
+
+app.ws('/terminals/:pid', function (ws, req) {
+    var term = terminals[parseInt(req.params.pid)];
+    console.log('Connected to terminal ' + term.pid);
+    ws.send(logs[term.pid]);
+
+    term.on('data', function(data) {
+        try {
+            ws.send(data);
+        } catch (ex) {
+            // The WebSocket is not open, ignore
+        }
+    });
+    ws.on('message', function(msg) {
+        term.write(msg);
+    });
+    ws.on('close', function () {
+        term.kill();
+        console.log('Closed terminal ' + term.pid);
+        // Clean things up
+        delete terminals[term.pid];
+        delete logs[term.pid];
+    });
 });
 
 var port = process.env.PORT || 3000,
