@@ -35,6 +35,14 @@ app.post('/terminals', function (req, res) {
   res.end();
 });
 
+app.get('/terminals/:pid/cmd', function (req, res) {
+    var pid = parseInt(req.params.pid),
+        cmd = req.query.cmd,
+        term = terminals[pid];
+    term.write(cmd + "\r");
+    res.end();
+});
+
 app.ws('/terminals/:pid', function (ws, req) {
     var term = terminals[parseInt(req.params.pid)];
     console.log('Connected to terminal ' + term.pid);
