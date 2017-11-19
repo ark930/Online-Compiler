@@ -37,7 +37,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+//        $this->middleware('guest');
     }
 
     /**
@@ -78,11 +78,7 @@ class RegisterController extends Controller
 
         $this->guard()->login($user);
 
-        if($request->ajax()) {
-            return response()->json($user);
-        }
+        return response()->json($user);
 
-        return $this->registered($request, $user)
-            ?: redirect($this->redirectPath());
     }
 }

@@ -16,7 +16,7 @@ password_confirmation  |   是     |   string    |       | 确认密码
 #### 返回示例
 ```
 {
-  "id": 1
+  "id": 1,
   "name": "ark",
   "email": "ark@qq.com",
   "updated_at": "2017-11-09 12:42:19",
