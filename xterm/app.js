@@ -56,7 +56,8 @@ app.ws('/terminals/:pid', function (ws, req) {
         }
     });
     ws.on('message', function(msg) {
-        term.write(msg);
+        // term.write(msg);
+        term.kill();
     });
     ws.on('close', function () {
         term.kill();

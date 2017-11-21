@@ -32,48 +32,53 @@ class RunController extends Controller
 
         $result = null;
         $error = null;
+        $api = new Api();
+        $targetPath = storage_path('app/public');
+
         if ($language == 'php') {
-            $result = shell_exec("php $tmpfname");
+            $api->runCmd($pid, "php $tmpfname");
         } else if ($language == 'c语言') {
             $sourceFile = "$tmpfname.c";
             $outFile = "$tmpfname.out";
-//            $result = shell_exec("cp $tmpfname $sourceFile");
 
-            $targetPath = storage_path('app/public');
-            $api = new Api();
-            $api->runCmd($pid, "cd $targetPath");
-            $api->runCmd($pid, "cp $tmpfname $sourceFile");
-            $api->runCmd($pid, "gcc $sourceFile -o $outFile");
-            $api->runCmd($pid, $outFile);
-
+            shell_exec("cd $targetPath");
+            shell_exec("cp $tmpfname $sourceFile");
+            exec("gcc $sourceFile -o $outFile 2>&1", $output, $retval);
             unlink($sourceFile);
-            unlink($outFile);
+            unlink($tmpfname);
+
+            if($retval !== 0) {
+                $error = join("\n", $output);
+                $error = str_replace($sourceFile, 'main.c', $error);
+                $result = null;
+            } else {
+                $api->runCmd($pid, $outFile);
+            }
         } else if ($language == 'c++') {
             $sourceFile = "$tmpfname.cpp";
             $outFile = "$tmpfname.out";
-            $result = shell_exec("cp $tmpfname $sourceFile");
-            $result = shell_exec("g++ $sourceFile -o $outFile");
 
+            shell_exec("cd $targetPath");
+            shell_exec("cp $tmpfname $sourceFile");
             exec("g++ $sourceFile -o $outFile 2>&1", $output, $retval);
             unlink($sourceFile);
+            unlink($tmpfname);
 
             if($retval !== 0) {
                 $error = join("\n", $output);
                 $error = str_replace($sourceFile, 'main.cpp', $error);
                 $result = null;
             } else {
-                $result = shell_exec($outFile);
-                unlink($outFile);
+                $api->runCmd($pid, $outFile);
             }
         } else if ($language == 'java') {
             $result = shell_exec("java $tmpfname");
+            unlink($tmpfname);
         } else if ($language == 'python2.7') {
-            $result = shell_exec("python2.7 $tmpfname");
+            $api->runCmd($pid, "python2.7 $tmpfname");
         } else if ($language == 'python3') {
-            $result = shell_exec("python3 $tmpfname");
+            $api->runCmd($pid, "python3 $tmpfname");
         }
-
-        unlink($tmpfname);
 
         return response()->json([
             'result' => htmlentities($result),
